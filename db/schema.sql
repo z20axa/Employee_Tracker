@@ -8,15 +8,16 @@ CREATE TABLE department (
     -- name_of_column   data_type   __options or default values__  NOT NULL or NULL
 	id INT auto_increment NOT NULL,
 	department_name VARCHAR(30) NOT NULL,
-    PRIMARY KEY (id) -- both primary key and auto_increment has to be set for the column id to work correctly
+    PRIMARY KEY (id)
 );
 
 CREATE TABLE role (
 	id INT auto_increment NOT NULL,
-    role_tittle VARCHAR(30) NOT NULL,
+    role_title VARCHAR(30) NOT NULL,
     role_salary DECIMAL NOT NULL,
     department_id INT NOT NULL,
-    PRIMARY KEY (id) -- both primary key and auto_increment has to be set for the column id to work correctly
+    PRIMARY KEY (id), 
+    FOREIGN KEY (department_id) REFERENCES department (id)
 );
 
 CREATE TABLE employee (
@@ -25,6 +26,8 @@ CREATE TABLE employee (
     last_name VARCHAR(30) NOT NULL,
     role_id INT NOT NULL,
     manager_id INT NOT NULL,
-    PRIMARY KEY (id) -- both primary key and auto_increment has to be set for the column id to work correctly
+    PRIMARY KEY (id),
+    FOREIGN KEY (role_id) REFERENCES role (id),
+    FOREIGN KEY (manager_id) REFERENCES employee (id)
 );
 
