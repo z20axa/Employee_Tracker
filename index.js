@@ -1,22 +1,83 @@
+// packages/modules imports
 const inquirer = require("inquirer");
-const connection = require('./db/connection.js');
-const { table } = require('table');
+const {table} = require('table');
+const connection = require('./db/connection');
 
+const inquirer_MainMenu = () => {
+  return inquirer.prompt([
+    {
+      type: "list",
+      message: "What would you like to do?",
+      choices: ["View All Departments", "View All Roles", "View All Employees", "Add a Depatment", "Add a Role", "Add an Employee", "Update an Employee Role", "Exit App"],
+      name: "todo"
+    }
+  ]).then(({todo}) => {
+    switch(todo){
+      case "Exit App":
+          return exit_app();
+      case "View All Departments":
+        viewAllDepartments();
+          break;
+      case "View All Roles":
+          viewAllRoles();
+          break;
+      // case "View All Employees":
+      //     viewAllEmployees();
+      //     break;
+      // case "Add a Depatment":
+      //     addDeparment();
+      //     break;
+      // case "Update an Employee Role":
+      //     updateEmployeeRole();
+      //     break;
+    }
+  });
+};
+
+// exit app function declaration
+const exit_app = () => {
+    // exit the script
+    connection.end();
+  };
+
+// view all deparment function declaration
 const viewAllDepartments = () => {
-    return connection.query(
-        // read 
-        `SELECT * FROM department`,
-        (err, result) => {
-          if(err) console.error(err);
-          let formattedResult = result.map( obj => Object.values(obj));
-          // add column names
-          formattedResult.unshift(["id","department_name"]);
-          // console.log(formattedResult);
-          console.log(table(formattedResult));
-          Inquirer_mainMenu();
-        }
-    )
-}
+  return connection.query(
+      // read 
+      `SELECT * FROM department_table`,
+      (err, result) => {
+        if(err) console.error(err);
+        let formattedResult = result.map( obj => Object.values(obj));
+        // add column names
+        formattedResult.unshift(["department_id","department_name"]);
+        // console.log(formattedResult);
+        console.log(table(formattedResult));
+        inquirer_MainMenu();
+      }
+  );
+};
+
+// view all roles function declaration
+const viewAllRoles = () => {
+  return connection.query(
+      // read 
+      `SELECT * FROM role_table`,
+      (err, result) => {
+        if(err) console.error(err);
+        let formattedResult = result.map( obj => Object.values(obj));
+        // add column names
+        formattedResult.unshift(["role_id","role_tittle","role_salary","department_id"]);
+        // console.log(formattedResult);
+        console.log(table(formattedResult));
+        inquirer_MainMenu();
+      }
+  );
+};
+
+
+
+// app init
+inquirer_MainMenu();
 
 // const viewAllRoles = () => {
 
@@ -38,51 +99,13 @@ const viewAllDepartments = () => {
 
 // }
 
-// const updateEmployeeRole = () => {
 
-// }
 
-const program_exit = () =>{
-    // use this when you want to exit the script
-    connection.end();
-  }
-
-const Inquirer_mainMenu = () => {
-    return inquirer.prompt([
-      {
-        type: "list",
-        message: "What would you like to do?",
-        choices: ["View All Departments", "View All Roles", "View All Employees", "Add a Depatment", "Add a Role", "Add an Employee", "Update an Employee Role", "exit"],
-        name: "option"
-      }
-    ])
-    .then(({option}) => {
-      switch(option){
-        case "exit":
-            return program_exit();
-        case "View All Departments":
-            viewAllDepartments();
-            break;
-        // case "View All Roles":
-        //     viewAllRoles();
-        //     break;
-        // case "View All Employees":
-        //     viewAllEmployees();
-        //     break;
-        // case "Add a Depatment":
-        //     addDeparment();
-        //     break;
-        // case "Update an Employee Role":
-        //     updateEmployeeRole();
-        //     break;
-      }
-    });
-  };
   
- connection.connect(function (err) {
-    if (err) throw err;
-    Inquirer_mainMenu();
-  });
+//  connection.connect(function (err) {
+//     if (err) throw err;
+//     Inquirer_mainMenu();
+//   });
 
 // const viewAllDeparments = () => {
 // //   flight_number, 
