@@ -3,7 +3,9 @@ const inquirer = require("inquirer");
 const {table} = require('table');
 const connection = require('./db/connection');
 
+// inquirer main menu function declaration
 const inquirer_MainMenu = () => {
+  // to do question to ask the user
   return inquirer.prompt([
     {
       type: "list",
@@ -25,13 +27,13 @@ const inquirer_MainMenu = () => {
           viewAllEmployees();
           break;
       case "Add a Department":
-          addDepartment();
+        addNewDepartment();
           break;
       case "Add a Role":
-          addRole();
+          addNewRole();
           break;
       case "Add an Employee":
-          addEmployee();
+          addNewEmployee();
           break;
       case "Update an Employee Role":
           updateEmployeeRole();
@@ -51,14 +53,23 @@ const viewAllDepartments = () => {
   return connection.query(
       // read 
       `SELECT * FROM department_table`,
+
       (err, result) => {
-        if(err) console.error(err);
-        let formattedResult = result.map( obj => Object.values(obj));
-        // console.log(formattedResult);
+      // error message
+      if(err) console.error(err);
+
+      // getting data
+       let formattedResult = result.map( obj => Object.values(obj));
+       // console.log(formattedResult);
+
         // add column names
         formattedResult.unshift(["Department id","Department Name"]);
         // console.log(formattedResult);
+
+        // print out formatted table
         console.log(table(formattedResult));
+
+        // function call to return to main menu
         inquirer_MainMenu();
       }
   );
@@ -69,6 +80,7 @@ const viewAllRoles = () => {
   return connection.query(
       // read 
       `SELECT * FROM role_table`,
+
       (err, result) => {
         // error message
         if(err) console.error(err);
@@ -90,7 +102,7 @@ const viewAllRoles = () => {
   );
 };
 
-// view all roles function declaration
+// view all employees function declaration
 const viewAllEmployees = () => {
   return connection.query(
       // read 
@@ -116,8 +128,8 @@ const viewAllEmployees = () => {
   );
 };
 
-// add a department function declaration
-const addDepartment = () => {
+// add a new department function declaration
+const addNewDepartment = () => {
   // questions to ask user to add a new department
   return inquirer.prompt([
     {
@@ -138,7 +150,7 @@ const addDepartment = () => {
       if (err) {
         console.log(err);
       }
-    console.log(result);
+    // console.log(result);
 
     // function call to return to main menu
     inquirer_MainMenu();
@@ -146,9 +158,45 @@ const addDepartment = () => {
   });
 };
 
-// const addRole = () => {
+// add a new role function declaration
+const addNewRole = () => {
+  // questions to ask user to add a new role
+  return inquirer.prompt([
+    {
+      type: "input",
+      message: "What is the role title that you would like to add? ",
+      name: "role_title"
+    },
+    {
+      type: "input",
+      message: "What is this new role salary? ",
+      name: "role_salary"
+    },
+    {
+      type: "input",
+      message: "What is this new role department id? ",
+      name: "role_departmentid"
+    },
+  ]).then( inputs => {
+    // add/insert new department to the database department table
+    connection.query(
+    `INSERT INTO role_table SET ?`,
+    [
+      inputs
+    ],
 
-// }
+    // error message
+    function (err, result) {
+      if (err) {
+        console.log(err);
+      }
+    // console.log(result);
+
+    // function call to return to main menu
+    inquirer_MainMenu();
+    });
+  });
+};
 
 // const addEmployee = () => {
 
