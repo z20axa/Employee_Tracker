@@ -14,22 +14,22 @@ const inquirer_MainMenu = () => {
   ]).then(({todo}) => {
     switch(todo){
       case "Exit App":
-          return exit_app();
-      case "View All Departments":
+        return exit_app();
+    case "View All Departments":
         viewAllDepartments();
           break;
       case "View All Roles":
           viewAllRoles();
           break;
-      // case "View All Employees":
-      //     viewAllEmployees();
-      //     break;
-      // case "Add a Depatment":
-      //     addDeparment();
-      //     break;
-      // case "Update an Employee Role":
-      //     updateEmployeeRole();
-      //     break;
+      case "View All Employees":
+          viewAllEmployees();
+          break;
+      case "Add a Depatment":
+          addDeparment();
+          break;
+      case "Update an Employee Role":
+          updateEmployeeRole();
+          break;
     }
   });
 };
@@ -49,7 +49,7 @@ const viewAllDepartments = () => {
         if(err) console.error(err);
         let formattedResult = result.map( obj => Object.values(obj));
         // add column names
-        formattedResult.unshift(["department_id","department_name"]);
+        formattedResult.unshift(["Department id","Department Name"]);
         // console.log(formattedResult);
         console.log(table(formattedResult));
         inquirer_MainMenu();
@@ -65,15 +65,33 @@ const viewAllRoles = () => {
       (err, result) => {
         if(err) console.error(err);
         let formattedResult = result.map( obj => Object.values(obj));
+        console.log(formattedResult);
         // add column names
-        formattedResult.unshift(["role_id","role_tittle","role_salary","department_id"]);
-        // console.log(formattedResult);
+        formattedResult.unshift(["Role id","Role Tittle","Role Salary","Department id"]);
+        console.log(formattedResult);
         console.log(table(formattedResult));
         inquirer_MainMenu();
       }
   );
 };
 
+// view all roles function declaration
+const viewAllEmployees = () => {
+  return connection.query(
+      // read 
+      `SELECT * FROM employee_table`,
+      (err, result) => {
+        if(err) console.error(err);
+        let formattedResult = result.map( obj => Object.values(obj));
+        console.log(formattedResult);
+        // add column names
+        formattedResult.unshift(["Employee id","Employee First Name","Employee Last Name","Role id", "Manager id"]);
+        console.log(formattedResult);
+        console.log(table(formattedResult));
+        inquirer_MainMenu();
+      }
+  );
+};
 
 
 // app init
