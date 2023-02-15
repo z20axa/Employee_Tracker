@@ -8,7 +8,7 @@ const inquirer_MainMenu = () => {
     {
       type: "list",
       message: "What would you like to do?",
-      choices: ["View All Departments", "View All Roles", "View All Employees", "Add a Depatment", "Add a Role", "Add an Employee", "Update an Employee Role", "Exit App"],
+      choices: ["View All Departments", "View All Roles", "View All Employees", "Add a Department", "Add a Role", "Add an Employee", "Update an Employee Role", "Exit App"],
       name: "todo"
     }
   ]).then(({todo}) => {
@@ -24,8 +24,14 @@ const inquirer_MainMenu = () => {
       case "View All Employees":
           viewAllEmployees();
           break;
-      case "Add a Depatment":
-          addDeparment();
+      case "Add a Department":
+          addDepartment();
+          break;
+      case "Add a Role":
+          addRole();
+          break;
+      case "Add an Employee":
+          addEmployee();
           break;
       case "Update an Employee Role":
           updateEmployeeRole();
@@ -48,6 +54,7 @@ const viewAllDepartments = () => {
       (err, result) => {
         if(err) console.error(err);
         let formattedResult = result.map( obj => Object.values(obj));
+        // console.log(formattedResult);
         // add column names
         formattedResult.unshift(["Department id","Department Name"]);
         // console.log(formattedResult);
@@ -63,13 +70,21 @@ const viewAllRoles = () => {
       // read 
       `SELECT * FROM role_table`,
       (err, result) => {
+        // error message
         if(err) console.error(err);
+
+        // getting data
         let formattedResult = result.map( obj => Object.values(obj));
-        console.log(formattedResult);
+        // console.log(formattedResult);
+
         // add column names
         formattedResult.unshift(["Role id","Role Tittle","Role Salary","Department id"]);
-        console.log(formattedResult);
+        // console.log(formattedResult);
+
+        // print out formatted table
         console.log(table(formattedResult));
+
+        // function call to return to main menu
         inquirer_MainMenu();
       }
   );
@@ -81,33 +96,55 @@ const viewAllEmployees = () => {
       // read 
       `SELECT * FROM employee_table`,
       (err, result) => {
+        // error message
         if(err) console.error(err);
+
+        // getting data
         let formattedResult = result.map( obj => Object.values(obj));
-        console.log(formattedResult);
+        // console.log(formattedResult);
+        
         // add column names
         formattedResult.unshift(["Employee id","Employee First Name","Employee Last Name","Role id", "Manager id"]);
-        console.log(formattedResult);
+        // console.log(formattedResult);
+
+        // print out formatted table
         console.log(table(formattedResult));
+
+        // function call to return to main menu
         inquirer_MainMenu();
       }
   );
 };
 
+// add a department function declaration
+const addDepartment = () => {
+  // questions to ask user to add a new department
+  return inquirer.prompt([
+    {
+      type: "input",
+      message: "What is the department name that you would like to add? ",
+      name: "department_name"
+    },
+  ]).then( inputs => {
+    // add/insert new department to the database department table
+    connection.query(
+    `INSERT INTO department_table SET ?`,
+    [
+      inputs
+    ],
 
-// app init
-inquirer_MainMenu();
+    // error message
+    function (err, result) {
+      if (err) {
+        console.log(err);
+      }
+    console.log(result);
 
-// const viewAllRoles = () => {
-
-// }
-
-// const viewAllEmployees = () => {
-
-// }
-
-// const addDeparment = () => {
-
-// }
+    // function call to return to main menu
+    inquirer_MainMenu();
+    });
+  });
+};
 
 // const addRole = () => {
 
@@ -117,118 +154,13 @@ inquirer_MainMenu();
 
 // }
 
+// const updateEmployee = () => {
 
-
-  
-//  connection.connect(function (err) {
-//     if (err) throw err;
-//     Inquirer_mainMenu();
-//   });
-
-// const viewAllDeparments = () => {
-// //   flight_number, 
-// // start_time,
-// // end_time,
-// // origin,
-// // destination,
-// // `status`,
-// // pilot_id
-//   console.log("Adding flight");
-//   return connection.query(
-//     // read from pilots
-//     `SELECT * FROM pilots`,
-//     (err, result) => {
-//       if(err) console.error(err);
-//       addFlightQuestions(result);
-//     }
-//   )
 // }
 
-// const addFlightQuestions = (pilots) => {
-//   pilots = pilots.map( pilot => ({
-//     name: pilot.first_name,
-//     value: pilot
-//   }));
-//   console.log(pilots);
+// app init
+inquirer_MainMenu();
 
-//   return inquirer.prompt([
-//     {
-//       type: "list",
-//       choices: pilots,
-//       message: "Which pilot?",
-//       name:"pilot"
-//     }
-//   ])
-//   .then( ({pilot}) => {
-//     console.log(JSON.stringify(pilot) + "\n\n\n\n\n");
-//     mainmenu();
-//   });
-//   // return mainmenu();
-// }
-
-// const viewPilots = () => {
-//   return connection.query(
-//     // read from pilots
-//     `SELECT * FROM pilots`,
-//     (err, result) => {
-//       if(err) console.error(err);
-//       let formattedResult = result.map( obj => Object.values(obj));
-//       // add column names
-//       formattedResult.unshift(["id","first_name", "last_name", "airline_name"]);
-//       // console.log(formattedResult);
-//       console.log(table(formattedResult));
-//       mainmenu();
-//     }
-//   )
-// }
-
-// const addPilot = () => {
-//   // assume you use inquirer to get the following
-//   //  first_name, last_name, airline_name
-
-//   return inquirer.prompt([
-//     {
-//       type: "input",
-//       message: "What is the pilot's first name? ",
-//       name: "first_name"
-//     },
-//     {
-//       type: "input",
-//       message: "What is the pilot's last name? ",
-//       name: "last_name"
-//     },
-//     {
-//       type: "input",
-//       message: "What is the pilot's airline? ",
-//       name: "airline_name"
-//     },
-//   ])
-//   // .then( ({first_name, last_name, airline_name}) => {
-//   .then( param => {
-    
-//     connection.query(
-//     `INSERT INTO pilots SET ?`,
-//     [
-//       // {
-//       //   first_name: "Bob", // first_name = "Bob",
-//       //   last_name: "Taco", // last_name = "Taco",
-//       //   airline_name: "Always Late Air" // airline_name = "Always Late Air"
-//       // }
-//       param
-//     ],
-//     /*
-//     INSERT INTO pilots SET first_name = "Bob", last_name = "Taco", airline_name = "Always Late Air"
-//     */
-//     function (err, result) {
-//       if (err) {
-//         console.log(err);
-//       }
-//       // console.log(result);
-//       mainmenu();
-//     });
-//   });
-  
-// }
 
 
 
