@@ -79,16 +79,10 @@ const Inquirer_mainMenu = () => {
     });
   };
   
-
-  
-connection.connect(function (err) {
+ connection.connect(function (err) {
     if (err) throw err;
     Inquirer_mainMenu();
   });
-
-
-
-
 
 // const viewAllDeparments = () => {
 // //   flight_number, 
