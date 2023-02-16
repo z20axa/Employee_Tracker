@@ -43,17 +43,10 @@ THEN I am prompted to select an employee to update and their new role and this i
 
 ## Walkthrough Video Link
 
-<!-- - Please follow [THIS LINK!]() -->
-- Video Link Coming Soon!!!
+- Please follow [THIS LINK!](https://www.loom.com/share/8d795fbd2eba48a99ee89eab5c353eba)
 
 ## App Screenshots
 
-- App ScreenShots coming soon!!!
-
-<!-- ![Capture1](./Assets/public/images/Capture1.PNG)
+![Capture1](./Assets/public/images/Capture1.PNG)
 ![Capture2](./Assets/public/images/Capture2.PNG)
-![Capture3](./Assets/public/images/Capture3.PNG)
-![Capture4](./Assets/public/images/Capture4.PNG)
-![Capture5](./Assets/public/images/Capture5.PNG)
-![Capture6](./Assets/public/images/Capture6.PNG)
-![Capture7](./Assets/public/images/Capture7.PNG) -->
+
